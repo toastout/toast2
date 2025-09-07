@@ -7,6 +7,14 @@
   <style>
     :root {
       --base-font-size: 16px;
+      /* ✨ 스타일 일관성을 위한 변수 추가 */
+      --text-color: #222;
+      --btn-bg: #e9ecef;
+      --btn-hover-bg: #dee2e6;
+      --input-bg: #fff;
+      --input-border: #aaa;
+      --preview-bg: #fafafa;
+      --preview-border: #ccc;
     }
     html {
       font-size: var(--base-font-size);
@@ -17,7 +25,7 @@
       margin: 40px auto;
       padding: 0 20px;
       background: #fff;
-      color: #222;
+      color: var(--text-color);
       transition: background 0.3s, color 0.3s;
       user-select: text;
       font-size: 1rem;
@@ -25,6 +33,14 @@
     body.dark {
       background: #121212;
       color: #ddd;
+      /* ✨ 다크 모드 변수 추가 */
+      --text-color: #ddd;
+      --btn-bg: #343a40;
+      --btn-hover-bg: #495057;
+      --input-bg: #1e1e1e;
+      --input-border: #555;
+      --preview-bg: #252525;
+      --preview-border: #444;
     }
     h1 { font-size: 2rem; }
     h3 { margin-top: 1.5rem; margin-bottom: 0.5rem; font-size: 1.25rem; }
@@ -32,13 +48,10 @@
     .column { flex: 1 1 45%; min-width: 300px; display: flex; flex-direction: column; }
     textarea {
       flex: 1 1 auto; min-height: 250px; font-size: 1rem; line-height: 1.6;
-      padding: 10px; border: 1px solid #aaa; border-radius: 4px;
-      background: #fff; color: #222; resize: vertical;
+      padding: 10px; border: 1px solid var(--input-border); border-radius: 4px;
+      background: var(--input-bg); color: var(--text-color); resize: vertical;
       font-family: inherit;
       white-space: pre-wrap; overflow-wrap: break-word;
-    }
-    body.dark textarea {
-      background: #1e1e1e; border-color: #555; color: #eee;
     }
     .copy-btn {
       background: #1976d2; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 4px;
@@ -47,20 +60,19 @@
     }
     .copy-btn:hover { background: #135ba1; }
     .preview {
-      min-height: 120px; border: 1px solid #ccc; padding: 12px;
-      white-space: pre-wrap; background: #fafafa; font-size: 1rem;
+      min-height: 120px; border: 1px solid var(--preview-border); padding: 12px;
+      white-space: pre-wrap; background: var(--preview-bg); font-size: 1rem;
       line-height: 1.5; border-radius: 4px; overflow-wrap: break-word;
       margin-top: 1.5rem;
     }
-    body.dark .preview { background: #252525; border-color: #444; color: #eee; }
-    .symbol-box button {
+    .symbol-box button, .util-btn {
       margin: 0 4px 0 0; font-size: 1.1rem; padding: 3px 9px;
       cursor: pointer; border-radius: 4px; border: 1.5px solid #888;
       background: #fafafa; transition: background-color 0.2s; user-select: none;
     }
-    .symbol-box button:hover { background: #d0e2ff; }
-    body.dark .symbol-box button { background: #2b2b2b; border-color: #666; color: #ddd; }
-    body.dark .symbol-box button:hover { background: #3a4a8f; }
+    .symbol-box button:hover, .util-btn:hover { background: #d0e2ff; }
+    body.dark .symbol-box button, body.dark .util-btn { background: #2b2b2b; border-color: #666; color: #ddd; }
+    body.dark .symbol-box button:hover, body.dark .util-btn:hover { background: #3a4a8f; }
     .quote { color: #2a58ff; background-color: #dbe5ff; padding: 0 3px; border-radius: 3px; }
     body.dark .quote { background-color: #2247b1; color: #a5c6ff; }
     .thought { color: #2e7d32; background-color: #d8f1d8; padding: 0 3px; border-radius: 3px; }
@@ -97,8 +109,6 @@
     .modal-close:hover { color: #222; }
     body.dark .modal-close:hover { color: #ddd; }
     .header { display: flex; justify-content: space-between; align-items: center; }
-    
-    /* ✨ 레이아웃 수정을 위한 스타일 */
     .column-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;}
     .column-header h3 { margin: 0; }
     .font-controls { display: flex; gap: 0.5rem; align-items: center; }
@@ -106,11 +116,35 @@
     #fontSizeDisplay { font-size: 0.9rem; font-weight: 600; min-width: 4ch; text-align: center; }
     .textarea-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; }
     .symbol-box { margin-bottom: 0; }
+    .header-controls { display: flex; gap: 8px; }
+    
+    /* ✨ 헤더 버튼 스타일 수정 */
+    .header-controls button {
+        background-color: var(--btn-bg);
+        color: var(--text-color);
+        border: none;
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+    .header-controls button:hover {
+        background-color: var(--btn-hover-bg);
+    }
+
+    .button-group { display: flex; gap: 5px; align-items: center; }
+    .button-group .util-btn { padding: 4px 8px; font-size: 1rem; }
   </style>
 </head>
 <body>
   <div class="header">
     <h1>💃 RP 글쓰기</h1>
+    <div class="header-controls">
+        <button id="main-link-btn" title="돌아가기">🍞️</button>
+        <button id="toggleDarkBtn" title="다크 모드">🌗</button>
+    </div>
   </div>
 
   <div class="columns">
@@ -120,12 +154,16 @@
       </div>
       <textarea id="refText" placeholder="{{char}}의 대사 등, 참고할 내용을 붙여넣으세요."></textarea>
       <div class="textarea-controls">
-        <span></span> <!-- 왼쪽 공간을 채우기 위한 빈 span -->
-        <button class="copy-btn" onclick="copyWithFeedback(this, 'refText')">복사</button>
+        <span></span>
+        <div class="button-group">
+            <button class="util-btn" id="ref-translate-ko-en" title="한→영 번역">🇬🇧</button>
+            <button class="util-btn" id="ref-translate-en-ko" title="영→한 번역">🇰🇷</button>
+            <button class="util-btn" id="ref-spell-check" title="맞춤법 검사">🔍</button>
+            <button class="copy-btn" onclick="copyWithFeedback(this, 'refText')">복사</button>
+        </div>
       </div>
     </div>
     <div class="column">
-      <!-- ✨ 제목과 글자 크기 조절 버튼을 한 줄에 배치 -->
       <div class="column-header">
         <h3>🔥 내 글 작성</h3>
         <div class="font-controls">
@@ -135,7 +173,6 @@
         </div>
       </div>
       <textarea id="myText" placeholder="{{user}}의 대사 등, 여기에 글을 작성하세요."></textarea>
-      <!-- ✨ 기호 삽입과 복사 버튼을 한 줄에 배치 -->
       <div class="textarea-controls">
         <div class="symbol-box" aria-label="기호 삽입">
           <button onclick="insertSymbol('“')" title="Alt + 1">“</button>
@@ -146,22 +183,24 @@
           <button onclick="insertSymbol('~')">~</button>
           <button onclick="insertSymbol('/')">/</button>
         </div>
-        <button class="copy-btn" onclick="copyWithFeedback(this, 'myText')">복사</button>
+        <div class="button-group">
+            <button class="util-btn" id="my-translate-ko-en" title="한→영 번역">🇬🇧</button>
+            <button class="util-btn" id="my-translate-en-ko" title="영→한 번역">🇰🇷</button>
+            <button class="util-btn" id="my-spell-check" title="맞춤법 검사">🔍</button>
+            <button class="copy-btn" onclick="copyWithFeedback(this, 'myText')">복사</button>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- ✨ 미리보기 위치를 columns 바로 아래로 이동 -->
   <h3>💭️ 내 글 미리보기 (실시간)</h3>
   <div class="preview" id="previewBox" aria-live="polite"></div>
 
-  <!-- ✨ 나머지 컨트롤 버튼들은 미리보기 아래에 배치 -->
   <div class="count-info" id="stats" aria-live="polite" style="margin-top: 20px; font-weight: 600; text-align: right;"></div>
   <div class="controls" aria-label="버전 및 기타 조작 버튼" style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 10px;">
     <button onclick="saveVersion()" title="Ctrl + S">💾 저장</button>
     <button onclick="clearText()">🧹 초기화</button>
     <button onclick="downloadText()">📤 내보내기</button>
-    <button onclick="toggleDark()">🌗</button>
     <button onclick="openHelp()">❔ 도움말</button>
   </div>
 
@@ -225,6 +264,11 @@
       document.body.classList.toggle('dark');
       localStorage.setItem('rp_darkmode', document.body.classList.contains('dark'));
     }
+    document.getElementById('toggleDarkBtn').addEventListener('click', toggleDark);
+    document.getElementById('main-link-btn').addEventListener('click', () => {
+        window.location.href = "https://toastout.github.io/toast/";
+    });
+
     if(localStorage.getItem('rp_darkmode') === 'true') {
       document.body.classList.add('dark');
     }
@@ -263,8 +307,7 @@
 
       html = html.replace(/"(.*?)"/g, '<span class="quote">"$1"</span>');
       html = html.replace(/“(.*?)”/g, '<span class="quote">“$1”</span>');
-      
-      html = html.replace(/__(.*?)__/g, '<span class="bold">$1</span>');
+      html = html.replace(/\/\/(.*?)\/\//g, '<span class="bold">$1</span>');
       html = html.replace(/~~(.*?)~~/g, '<span class="strike">$1</span>');
       html = html.replace(/_(.*?)_/g, '<span class="memo">$1</span>');
       html = html.replace(/'(.*?)'/g, '<span class="thought">\'$1\'</span>');
@@ -366,6 +409,37 @@
       document.getElementById('helpModal').style.display = 'none';
     }
 
+    function openTranslator(elementId, sl, tl) {
+        const text = document.getElementById(elementId).value.trim();
+        if (!text) return;
+        window.open(`https://translate.google.com/?sl=${sl}&tl=${tl}&text=${encodeURIComponent(text)}&op=translate`, '_blank');
+    }
+
+    function openSpellChecker(elementId) {
+        const text = document.getElementById(elementId).value.trim();
+        if (!text) return;
+        try {
+            const tempInput = document.createElement('textarea');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            alert('내용이 복사되었습니다. 맞춤법 검사기 사이트에 붙여넣으세요.');
+            window.open('https://nara-speller.co.kr/speller', '_blank');
+        } catch(err) {
+            alert('복사에 실패했습니다.');
+        }
+    }
+    
+    document.getElementById('ref-translate-ko-en').addEventListener('click', () => openTranslator('refText', 'ko', 'en'));
+    document.getElementById('ref-translate-en-ko').addEventListener('click', () => openTranslator('refText', 'en', 'ko'));
+    document.getElementById('ref-spell-check').addEventListener('click', () => openSpellChecker('refText'));
+    document.getElementById('my-translate-ko-en').addEventListener('click', () => openTranslator('myText', 'ko', 'en'));
+    document.getElementById('my-translate-en-ko').addEventListener('click', () => openTranslator('myText', 'en', 'ko'));
+    document.getElementById('my-spell-check').addEventListener('click', () => openSpellChecker('myText'));
+
+
     document.addEventListener('keydown', (e) => {
       if (e.ctrlKey && e.key === 's') {
         e.preventDefault();
@@ -376,7 +450,7 @@
           case '1': e.preventDefault(); insertSymbol('“'); break;
           case '2': e.preventDefault(); insertSymbol('”'); break;
           case '3': e.preventDefault(); insertSymbol('\''); break;
-          case '4': e.preventDefault(); insertSymbol('*'); break;
+          case '4g': e.preventDefault(); insertSymbol('*'); break;
         }
       }
     });
@@ -390,6 +464,20 @@
     });
 
     window.onload = () => {
+      // ✨ CSS 변수와 연결하기 위해 body 스타일 업데이트 로직 추가
+      if(localStorage.getItem('rp_darkmode') === 'true') {
+        document.body.classList.add('dark');
+      } else {
+        // body.dark에만 정의된 변수들을 light 모드에서도 초기화
+        document.body.style.setProperty('--text-color', '#222');
+        document.body.style.setProperty('--btn-bg', '#e9ecef');
+        document.body.style.setProperty('--btn-hover-bg', '#dee2e6');
+        document.body.style.setProperty('--input-bg', '#fff');
+        document.body.style.setProperty('--input-border', '#aaa');
+        document.body.style.setProperty('--preview-bg', '#fafafa');
+        document.body.style.setProperty('--preview-border', '#ccc');
+      }
+        
       const savedFontSize = localStorage.getItem('rp_fontSize');
       if (savedFontSize) {
         currentFontSize = parseInt(savedFontSize, 10);
@@ -400,6 +488,16 @@
       refText.value = localStorage.getItem('rp_refText') || '';
       renderVersionList();
       updatePreviewAndStats();
+      
+      // ✨ textarea에 CSS 변수 적용
+      const textareas = document.querySelectorAll('textarea');
+      textareas.forEach(ta => {
+          ta.style.backgroundColor = 'var(--input-bg)';
+          ta.style.color = 'var(--text-color)';
+          ta.style.borderColor = 'var(--input-border)';
+      });
+      document.getElementById('previewBox').style.backgroundColor = 'var(--preview-bg)';
+      document.getElementById('previewBox').style.borderColor = 'var(--preview-border)';
     };
   </script>
 </body>
