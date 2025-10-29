@@ -5,9 +5,16 @@
   <title>💃 RP 글쓰기</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
+    /* ✨ 리디바탕 폰트 추가 */
+    @font-face {
+      font-family: 'Ridibatang';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.0/RIDIBatang.woff') format('woff');
+      font-weight: normal;
+      font-display: swap;
+    }
+
     :root {
-      --base-font-size: 16px;
-      /* ✨ 스타일 일관성을 위한 변수 추가 */
+      --editor-font-size: 16px; /* ✨ 입력창/미리보기 전용 글꼴 크기 */
       --text-color: #222;
       --btn-bg: #e9ecef;
       --btn-hover-bg: #dee2e6;
@@ -16,24 +23,10 @@
       --preview-bg: #fafafa;
       --preview-border: #ccc;
     }
-    html {
-      font-size: var(--base-font-size);
-    }
-    body {
-      font-family: "Pretendard", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      max-width: 900px;
-      margin: 40px auto;
-      padding: 0 20px;
-      background: #fff;
-      color: var(--text-color);
-      transition: background 0.3s, color 0.3s;
-      user-select: text;
-      font-size: 1rem;
-    }
+    
     body.dark {
       background: #121212;
       color: #ddd;
-      /* ✨ 다크 모드 변수 추가 */
       --text-color: #ddd;
       --btn-bg: #343a40;
       --btn-hover-bg: #495057;
@@ -42,29 +35,64 @@
       --preview-bg: #252525;
       --preview-border: #444;
     }
+    
+    body {
+      font-family: 'Ridibatang', "Pretendard", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+      background: #fff;
+      color: var(--text-color);
+      transition: background 0.3s, color 0.3s;
+      user-select: text;
+      font-size: 16px; /* ✨ 고정 크기 (버튼, 제목용) */
+    }
+    
     h1 { font-size: 2rem; }
     h3 { margin-top: 1.5rem; margin-bottom: 0.5rem; font-size: 1.25rem; }
+    
     .columns { display: flex; gap: 20px; flex-wrap: wrap; }
     .column { flex: 1 1 45%; min-width: 300px; display: flex; flex-direction: column; }
-    textarea {
-      flex: 1 1 auto; min-height: 250px; font-size: 1rem; line-height: 1.6;
-      padding: 10px; border: 1px solid var(--input-border); border-radius: 4px;
-      background: var(--input-bg); color: var(--text-color); resize: vertical;
-      font-family: inherit;
-      white-space: pre-wrap; overflow-wrap: break-word;
-    }
+    
+	/* ✨ 입력창 스타일 - 리디바탕 강제 적용 */
+	textarea {
+	flex: 1 1 auto; 
+	min-height: 250px; 
+	font-size: var(--editor-font-size) !important; /* ✨ !important 추가 */
+	line-height: 1.6;
+	padding: 10px; 
+	border: 1px solid var(--input-border); 
+	border-radius: 4px;
+	background: var(--input-bg); 
+	color: var(--text-color); 
+	resize: vertical;
+	font-family: 'Ridibatang', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important; /* ✨ !important 추가 */
+	white-space: pre-wrap; 
+	overflow-wrap: break-word;
+	}
+    
     .copy-btn {
       background: #1976d2; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 4px;
       cursor: pointer; font-size: 0.9rem; user-select: none;
       transition: background-color 0.3s;
     }
     .copy-btn:hover { background: #135ba1; }
+    
+    /* ✨ 미리보기 스타일 - 글꼴 크기 변수 적용 */
     .preview {
-      min-height: 120px; border: 1px solid var(--preview-border); padding: 12px;
-      white-space: pre-wrap; background: var(--preview-bg); font-size: 1rem;
-      line-height: 1.5; border-radius: 4px; overflow-wrap: break-word;
+      min-height: 120px; 
+      border: 1px solid var(--preview-border); 
+      padding: 12px;
+      white-space: pre-wrap; 
+      background: var(--preview-bg); 
+      font-size: var(--editor-font-size); /* ✨ 변수 적용 */
+      line-height: 1.5; 
+      border-radius: 4px; 
+      overflow-wrap: break-word;
       margin-top: 1.5rem;
+      font-family: 'Ridibatang', inherit; /* ✨ 리디바탕 적용 */
     }
+    
     .symbol-box button, .util-btn {
       margin: 0 4px 0 0; font-size: 1.1rem; padding: 3px 9px;
       cursor: pointer; border-radius: 4px; border: 1.5px solid #888;
@@ -73,18 +101,80 @@
     .symbol-box button:hover, .util-btn:hover { background: #d0e2ff; }
     body.dark .symbol-box button, body.dark .util-btn { background: #2b2b2b; border-color: #666; color: #ddd; }
     body.dark .symbol-box button:hover, body.dark .util-btn:hover { background: #3a4a8f; }
-    .quote { color: #2a58ff; background-color: #dbe5ff; padding: 0 3px; border-radius: 3px; }
-    body.dark .quote { background-color: #2247b1; color: #a5c6ff; }
-    .thought { color: #2e7d32; background-color: #d8f1d8; padding: 0 3px; border-radius: 3px; }
-    body.dark .thought { background-color: #2a4b2a; color: #b7e1b7; }
-    .desc { color: #666666; font-style: italic; background-color: #f0f0f0; padding: 0 3px; border-radius: 3px; }
-    body.dark .desc { background-color: #3a3a3a; color: #bbb; }
-    .bold { font-weight: 700; background-color: #fff5b1; padding: 0 3px; border-radius: 3px; color: #6a4800; }
-    body.dark .bold { background-color: #9e7f1d; color: #fffaf0; }
-    .strike { text-decoration: line-through; color: #a00; background-color: #ffe0e0; padding: 0 3px; border-radius: 3px; }
-    body.dark .strike { background-color: #731212; color: #ff8f8f; }
-    .memo { font-size: 0.85em; color: #666; background-color: #f9f9f9; padding: 2px 5px; border-radius: 3px; font-family: monospace; user-select: none; }
-    body.dark .memo { background-color: #2c2c2c; color: #999; }
+    
+	/* ✨ 개선된 색상 */
+	.quote { 
+	color: #1565c0; 
+	background-color: #e3f2fd; 
+	padding: 0 3px; 
+	border-radius: 3px; 
+	}
+	body.dark .quote { 
+	background-color: #1a237e; 
+	color: #90caf9; 
+	}
+	
+	.thought { 
+	color: #2e7d32; 
+	background-color: #e8f5e9; 
+	padding: 0 3px; 
+	border-radius: 3px; 
+	}
+	body.dark .thought { 
+	background-color: #1b5e20; 
+	color: #a5d6a7; 
+	}
+	
+	.desc { 
+	color: #546e7a; 
+	font-style: italic; 
+	background-color: #eceff1; 
+	padding: 0 3px; 
+	border-radius: 3px; 
+	}
+	body.dark .desc { 
+	background-color: #263238; 
+	color: #b0bec5; 
+	}
+	
+	.bold { 
+	font-weight: 700; 
+	background-color: #fff9c4; 
+	color: #f57f17; 
+	padding: 0 3px; 
+	border-radius: 3px; 
+	}
+	body.dark .bold { 
+	background-color: #f57f17; 
+	color: #fff59d; 
+	}
+	
+	.strike { 
+	text-decoration: line-through; 
+	color: #c62828; 
+	background-color: #ffebee; 
+	padding: 0 3px; 
+	border-radius: 3px; 
+	}
+	body.dark .strike { 
+	background-color: #b71c1c; 
+	color: #ef9a9a; 
+	}
+	
+	.memo { 
+	font-size: 0.85em; 
+	color: #666; 
+	background-color: #f9f9f9; 
+	padding: 2px 5px; 
+	border-radius: 3px; 
+	font-family: monospace; 
+	user-select: none; 
+	}
+	body.dark .memo { 
+	background-color: #2c2c2c; 
+	color: #999; 
+	}
+    
     .version-item {
       display: flex; align-items: center; justify-content: space-between;
       margin-bottom: 6px; border-bottom: 1px solid #ddd; padding-bottom: 2px;
@@ -97,6 +187,7 @@
       transition: background-color 0.3s;
     }
     .version-item button:hover { background: #b94545; }
+    
     #overlay { position: fixed; display: none; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; }
     #helpModal {
       display: none; position: fixed; top: 50%; left: 50%;
@@ -108,17 +199,33 @@
     .modal-close { position: absolute; top: 7px; right: 12px; cursor: pointer; font-weight: 900; font-size: 1.2rem; user-select: none; color: #888; transition: color 0.3s; }
     .modal-close:hover { color: #222; }
     body.dark .modal-close:hover { color: #ddd; }
+    
     .header { display: flex; justify-content: space-between; align-items: center; }
     .column-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;}
     .column-header h3 { margin: 0; }
-    .font-controls { display: flex; gap: 0.5rem; align-items: center; }
-    .font-controls button { font-size: 1.2rem; line-height: 1; padding: 0.2rem 0.6rem; }
-    #fontSizeDisplay { font-size: 0.9rem; font-weight: 600; min-width: 4ch; text-align: center; }
+    
+    /* ✨ 글꼴 크기 조절 UI */
+    .font-controls { 
+      display: flex; 
+      gap: 0.5rem; 
+      align-items: center; 
+    }
+    .font-controls button { 
+      font-size: 1.2rem; 
+      line-height: 1; 
+      padding: 0.2rem 0.6rem; 
+    }
+    #fontSizeDisplay { 
+      font-size: 0.9rem; 
+      font-weight: 600; 
+      min-width: 4ch; 
+      text-align: center; 
+    }
+    
     .textarea-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; }
     .symbol-box { margin-bottom: 0; }
     .header-controls { display: flex; gap: 8px; }
     
-    /* ✨ 헤더 버튼 스타일 수정 */
     .header-controls button {
         background-color: var(--btn-bg);
         color: var(--text-color);
@@ -168,7 +275,7 @@
         <h3>🔥 내 글 작성</h3>
         <div class="font-controls">
           <button id="decreaseFontBtn" title="글자 작게">-</button>
-          <span id="fontSizeDisplay">100%</span>
+          <span id="fontSizeDisplay">16px</span>
           <button id="increaseFontBtn" title="글자 크게">+</button>
         </div>
       </div>
@@ -216,12 +323,13 @@
     <div id="helpDesc">
       <p><strong>기호별 역할 안내</strong></p>
       <ul>
-        <li><code>“ ”</code> 또는 <code>" "</code> : 대사 (파란색 하이라이팅)</li>
-        <li><code>' '</code> : 생각 표현 (초록색)</li>
-        <li><code>* *</code> : 묘사 강조 (회색, 이탤릭)</li>
-        <li><code>/ /</code> : 굵은 강조</li>
-        <li><code>~ ~</code> : 삭제선 스타일</li>
-        <li><code>_ _</code> : 메모 스타일</li>
+        <li><code>“ ”</code> 또는 <code>" "</code> : 대사 (파란색)</li></span>
+        <li><code>' '</code> : 생각 표현 (초록색)</li></span>
+        <li><code>* *</code> : 묘사 강조 (청회색, 이탤릭)</li></span>
+        <li><code>/ /</code> : 굵은 강조 (노란색)</li></span>
+        <li><code>~ ~</code> : 삭제선 스타일 (빨간색)</li></span>
+        <li><code>_ _</code> : 메모 스타일</li></span>
+		
       </ul>
       <p><strong>✨ 단축키 안내</strong></p>
       <ul>
@@ -241,18 +349,19 @@
     const increaseFontBtn = document.getElementById('increaseFontBtn');
     const decreaseFontBtn = document.getElementById('decreaseFontBtn');
     const fontSizeDisplay = document.getElementById('fontSizeDisplay');
+    
+    // ✨ 글꼴 크기 관리 (px 단위)
     let currentFontSize = 16; 
 
     function applyFontSize() {
-      const percentage = Math.round((currentFontSize / 16) * 100);
-      document.documentElement.style.setProperty('--base-font-size', `${currentFontSize}px`);
-      fontSizeDisplay.textContent = `${percentage}%`;
+      document.documentElement.style.setProperty('--editor-font-size', `${currentFontSize}px`);
+      fontSizeDisplay.textContent = `${currentFontSize}px`;
     }
 
     function changeFontSize(amount) {
       currentFontSize += amount;
       if (currentFontSize < 12) currentFontSize = 12;
-      if (currentFontSize > 24) currentFontSize = 24;
+      if (currentFontSize > 28) currentFontSize = 28;
       applyFontSize();
       localStorage.setItem('rp_fontSize', currentFontSize);
     }
@@ -305,16 +414,22 @@
       let html = rawText;
       html = html.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-      html = html.replace(/"(.*?)"/g, '<span class="quote">"$1"</span>');
-      html = html.replace(/“(.*?)”/g, '<span class="quote">“$1”</span>');
-      html = html.replace(/\/\/(.*?)\/\//g, '<span class="bold">$1</span>');
-      html = html.replace(/~~(.*?)~~/g, '<span class="strike">$1</span>');
-      html = html.replace(/_(.*?)_/g, '<span class="memo">$1</span>');
-      html = html.replace(/'(.*?)'/g, '<span class="thought">\'$1\'</span>');
-      html = html.replace(/\*(.*?)\*/g, '<span class="desc">*$1*</span>');
-      html = html.replace(/\n/g, '<br>');
-      previewBox.innerHTML = html;
-    }
+	// ✨ 이중 기호 먼저 처리 (우선순위)
+	html = html.replace(/"(.*?)"/g, '<span class="quote">"$1"</span>');
+	html = html.replace(/“(.*?)”/g, '<span class="quote">"$1"</span>');
+	html = html.replace(/\/\/(.+?)\/\//g, '<span class="bold">$1</span>');
+	html = html.replace(/~~(.+?)~~/g, '<span class="strike">$1</span>');
+	
+	// ✨ 단일 기호 처리
+	html = html.replace(/\/(.+?)\//g, '<span class="bold">$1</span>');
+	html = html.replace(/~(.+?)~/g, '<span class="strike">$1</span>');
+	html = html.replace(/_(.+?)_/g, '<span class="memo">$1</span>');
+	html = html.replace(/'(.+?)'/g, '<span class="thought">\'$1\'</span>');
+	html = html.replace(/\*(.+?)\*/g, '<span class="desc">*$1*</span>');
+	
+	html = html.replace(/\n/g, '<br>');
+	previewBox.innerHTML = html;
+	}
 
     function updateStats() {
       const text = myText.value;
@@ -439,7 +554,6 @@
     document.getElementById('my-translate-en-ko').addEventListener('click', () => openTranslator('myText', 'en', 'ko'));
     document.getElementById('my-spell-check').addEventListener('click', () => openSpellChecker('myText'));
 
-
     document.addEventListener('keydown', (e) => {
       if (e.ctrlKey && e.key === 's') {
         e.preventDefault();
@@ -450,7 +564,7 @@
           case '1': e.preventDefault(); insertSymbol('“'); break;
           case '2': e.preventDefault(); insertSymbol('”'); break;
           case '3': e.preventDefault(); insertSymbol('\''); break;
-          case '4g': e.preventDefault(); insertSymbol('*'); break;
+          case '4': e.preventDefault(); insertSymbol('*'); break;
         }
       }
     });
@@ -464,18 +578,8 @@
     });
 
     window.onload = () => {
-      // ✨ CSS 변수와 연결하기 위해 body 스타일 업데이트 로직 추가
       if(localStorage.getItem('rp_darkmode') === 'true') {
         document.body.classList.add('dark');
-      } else {
-        // body.dark에만 정의된 변수들을 light 모드에서도 초기화
-        document.body.style.setProperty('--text-color', '#222');
-        document.body.style.setProperty('--btn-bg', '#e9ecef');
-        document.body.style.setProperty('--btn-hover-bg', '#dee2e6');
-        document.body.style.setProperty('--input-bg', '#fff');
-        document.body.style.setProperty('--input-border', '#aaa');
-        document.body.style.setProperty('--preview-bg', '#fafafa');
-        document.body.style.setProperty('--preview-border', '#ccc');
       }
         
       const savedFontSize = localStorage.getItem('rp_fontSize');
@@ -488,16 +592,6 @@
       refText.value = localStorage.getItem('rp_refText') || '';
       renderVersionList();
       updatePreviewAndStats();
-      
-      // ✨ textarea에 CSS 변수 적용
-      const textareas = document.querySelectorAll('textarea');
-      textareas.forEach(ta => {
-          ta.style.backgroundColor = 'var(--input-bg)';
-          ta.style.color = 'var(--text-color)';
-          ta.style.borderColor = 'var(--input-border)';
-      });
-      document.getElementById('previewBox').style.backgroundColor = 'var(--preview-bg)';
-      document.getElementById('previewBox').style.borderColor = 'var(--preview-border)';
     };
   </script>
 </body>
